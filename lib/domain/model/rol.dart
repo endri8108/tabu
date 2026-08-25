@@ -1,0 +1,1 @@
+enum Rol { anlatan, tahminEden, bekleyen }
