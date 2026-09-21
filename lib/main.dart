@@ -27,6 +27,7 @@ void main() {
   );
 
   var durum = Durum(
+    kurulum : kurulum,
     takimListesi : [takim1,takim2],
     aktifTakimIndex : 0,
     aktifKelime: Kelime(metin:'Star',yasaklilar:['sky','galaxy','universe'],zorlukSeviyesi:2),
