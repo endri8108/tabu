@@ -1,48 +1,55 @@
-import 'domain/model/oyuncu.dart';
-import 'domain/model/takim.dart';
-import 'domain/model/kelime.dart';
-import 'domain/model/oyun_kurulumu.dart';
-import 'domain/model/kart_sonucu.dart';
-import 'domain/model/durum.dart';
+import 'domain/model/player.dart';
+import 'domain/model/team.dart';
+import 'domain/model/word.dart';
+import 'domain/model/game_config.dart';
+import 'domain/model/game_state.dart';
 
 void main() {
-  
-  var anakin = Oyuncu(ad: 'Anakin', id:1);
-  var obiwan = Oyuncu(ad:'Obi Wan Kenobi',id:2);
+  var anakin = Player(name: 'Anakin', id: 1);
+  var obiwan = Player(name: 'Obi Wan Kenobi', id: 2);
 
-  var maul   = Oyuncu(ad:'Darth Maul',id:3);
-  var sidious= Oyuncu(ad:'Darth Sidious',id:4);
+  var maul = Player(name: 'Darth Maul', id: 3);
+  var sidious = Player(name: 'Darth Sidious', id: 4);
 
+  var jedi = Team(name: 'Jedi', players: [anakin, obiwan], score: 0);
+  var sith = Team(name: 'Sith', players: [maul, sidious], score: 1);
 
-  var takim1 = Takim(ad:'Jedi',oyuncular:[anakin , obiwan],skor:0);
-  var takim2 = Takim(ad:'Sith',oyuncular:[maul,sidious],skor:1);
-  var kelime1= Kelime(metin: 'War',yasaklilar:['light','dark','saber'],zorlukSeviyesi:2);
-  var kelime2= Kelime(metin: 'Force',yasaklilar:['jedi','sith','push'],zorlukSeviyesi:3);
-
-  var kurulum = OyunKurulumu(
-    sure: 60,
-    hedefSkor: 30,
-    passHakki: 3,
-    oyuncular: [anakin, obiwan,maul,sidious],
+  var war = Word(
+    text: 'War',
+    forbiddenWords: ['light', 'dark', 'saber'],
+    difficulty: 2,
+  );
+  var force = Word(
+    text: 'Force',
+    forbiddenWords: ['jedi', 'sith', 'push'],
+    difficulty: 3,
   );
 
-  var durum = Durum(
-    kurulum : kurulum,
-    takimListesi : [takim1,takim2],
-    aktifTakimIndex : 0,
-    aktifKelime: Kelime(metin:'Star',yasaklilar:['sky','galaxy','universe'],zorlukSeviyesi:2),
-    kalanKelimeler: [kelime1,kelime2],
-    kalanPass : 3,
-    kalanSure : 10,
-    finish : false,
-
+  var config = GameConfig(
+    roundSeconds: 60,
+    targetScore: 30,
+    passLimit: 3,
+    players: [anakin, obiwan, maul, sidious],
   );
 
-  var yenitakim = takim2.copyWith(ad:'Dark Side');
-  var yenisure = durum.copyWith(kalanSure:9);
+  var state = GameState(
+    config: config,
+    teams: [jedi, sith],
+    activeTeamIndex: 0,
+    currentWord: Word(
+      text: 'Star',
+      forbiddenWords: ['sky', 'galaxy', 'universe'],
+      difficulty: 2,
+    ),
+    remainingWords: [war, force],
+    remainingPasses: 3,
+    remainingSeconds: 10,
+    isFinished: false,
+  );
 
-  print('${takim2.ad}: ${yenitakim.oyuncuSayisi} oyuncu');
-  print('${yenisure.kalanSure} s');
+  var renamedTeam = sith.copyWith(name: 'Dark Side');
+  var tickedState = state.copyWith(remainingSeconds: 9);
 
-
+  print('${sith.name}: ${renamedTeam.playerCount} players');
+  print('${tickedState.remainingSeconds} s');
 }
