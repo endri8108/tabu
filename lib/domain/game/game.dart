@@ -15,6 +15,9 @@ GameState apply(GameState state, GameEvent event) {
       if (updatedTeam.score >= state.config.targetScore) {
         return state.copyWith(teams: updatedTeams, isFinished: true);
       }
+      if (state.remainingWords.isEmpty) {
+        return state.copyWith(teams: updatedTeams, isFinished: true);
+      }
 
       var nextWord = state.remainingWords[0];
       var rest = state.remainingWords.sublist(1);
@@ -33,6 +36,10 @@ GameState apply(GameState state, GameEvent event) {
       var updatedTeams = List.of(state.teams);
       updatedTeams[state.activeTeamIndex] = updatedTeam;
 
+      if (state.remainingWords.isEmpty) {
+        return state.copyWith(teams: updatedTeams, isFinished: true);
+      }
+
       var nextWord = state.remainingWords[0];
       var rest = state.remainingWords.sublist(1);
 
@@ -43,8 +50,9 @@ GameState apply(GameState state, GameEvent event) {
       );
 
     case Pass():
-      if (state.remainingPasses <= 0) return state;
-
+      if (state.remainingPasses <= 0) {
+        return state;
+      }
       if (state.remainingWords.isEmpty) return state.copyWith(isFinished: true);
 
       Word nextWord = state.remainingWords[0];
