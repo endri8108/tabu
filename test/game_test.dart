@@ -56,7 +56,6 @@ void main() {
     // Verilen
     var state = sampleState();
 
-    // Yapılan
     var result = apply(state, Correct());
 
     // Beklenen
