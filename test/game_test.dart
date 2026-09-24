@@ -78,4 +78,12 @@ void main() {
 
     expect(result.teams[0].score, 0);
   });
+
+  test('copyWith can set currentWord to null', () {
+    var state = sampleState();
+
+    var result = state.copyWith(currentWord: () => null);
+
+    expect(result.currentWord, null);
+  });
 }

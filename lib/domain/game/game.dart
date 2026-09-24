@@ -27,7 +27,7 @@ GameState apply(GameState state, GameEvent event) {
 
       return state.copyWith(
         teams: updatedTeams,
-        currentWord: nextWord,
+        currentWord: () => nextWord,
         remainingWords: rest,
       );
 
@@ -48,7 +48,7 @@ GameState apply(GameState state, GameEvent event) {
 
       return state.copyWith(
         teams: updatedTeams,
-        currentWord: nextWord,
+        currentWord: () => nextWord,
         remainingWords: rest,
       );
 
@@ -63,7 +63,7 @@ GameState apply(GameState state, GameEvent event) {
 
       return state.copyWith(
         remainingPasses: state.remainingPasses - 1,
-        currentWord: nextWord,
+        currentWord: () => nextWord,
         remainingWords: rest,
       );
 
