@@ -66,8 +66,16 @@ void main() {
     var state = sampleState().copyWith(remainingWords: []);
     // Yapılan
     var result = apply(state, Correct());
-    //Beklenen
+    // Beklenen
     expect(result.isFinished, true);
     expect(result.teams[0].score, 1);
+  });
+
+  test('When the game is finished nothing must change after that.', () {
+    var state = sampleState().copyWith(isFinished: true);
+
+    var result = apply(state, Correct());
+
+    expect(result.teams[0].score, 0);
   });
 }

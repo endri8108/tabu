@@ -3,6 +3,9 @@ import '../model/game_state.dart';
 import 'game_event.dart';
 
 GameState apply(GameState state, GameEvent event) {
+  if (state.isFinished) {
+    return state;
+  }
   switch (event) {
     case Correct():
       var activeTeam = state.teams[state.activeTeamIndex];
