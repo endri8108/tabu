@@ -7,8 +7,6 @@ import 'package:tabu/domain/model/player.dart';
 import 'package:tabu/domain/model/word.dart';
 import 'package:tabu/domain/model/game_config.dart';
 
-// Her testte baştan kurmamak için örnek bir başlangıç durumu.
-// İpucu: main.dart'taki Jedi/Sith kodunu buraya taşı.
 GameState sampleState() {
   var anakin = Player(name: 'Anakin', id: 1);
   var obiwan = Player(name: 'Obi Wan Kenobi', id: 2);
@@ -58,7 +56,6 @@ void main() {
     // Verilen
     var state = sampleState();
 
-    // Yapılan
     var result = apply(state, Correct());
 
     // Beklenen
@@ -66,12 +63,10 @@ void main() {
   });
 
   test('Correct on last word ends the game without crashing', () {
-    // Verilen: deste BOŞ olan bir durum
-    //   ipucu: sampleState().copyWith(remainingWords: [])
     var state = sampleState().copyWith(remainingWords: []);
-    // Yapılan: Correct
+    // Yapılan
     var result = apply(state, Correct());
-    // Beklenen: isFinished true VE skor 1 (son kelime sayılır, senin kuralın)
+    //Beklenen
     expect(result.isFinished, true);
     expect(result.teams[0].score, 1);
   });
