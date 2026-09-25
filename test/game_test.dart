@@ -109,4 +109,21 @@ void main() {
     var state = sampleState();
     expect(() => GameState.initial(state.config, []), throwsArgumentError);
   });
+
+  test('Turn passes to the other team when time runs out', () {
+    var state = sampleState().copyWith(remainingSeconds: 1);
+
+    var result = apply(state, SecondTick());
+
+    expect(result.activeTeamIndex, 1);
+    expect(result.remainingSeconds, state.config.roundSeconds);
+  });
+
+  test('TurnEnded draws a new card', () {
+    var state = sampleState();
+
+    var result = apply(state, TurnEnded());
+
+    expect(result.currentWord, state.remainingWords[0]);
+  });
 }
