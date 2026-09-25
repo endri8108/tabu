@@ -82,12 +82,21 @@ GameState apply(GameState state, GameEvent event) {
 
       var nextWord = state.remainingWords[0];
 
+      var activeTeam = state.teams[state.activeTeamIndex];
+
+      var newIndex = (activeTeam.describerIndex + 1) % activeTeam.playerCount;
+      var updatedTeam = activeTeam.copyWith(describerIndex: newIndex);
+
+      var updatedTeams = List.of(state.teams);
+      updatedTeams[state.activeTeamIndex] = updatedTeam;
+
       return state.copyWith(
         activeTeamIndex: nextIndex,
         remainingSeconds: state.config.roundSeconds,
         remainingPasses: state.config.passLimit,
         currentWord: () => nextWord,
         remainingWords: state.remainingWords.sublist(1),
+        teams: updatedTeams,
       );
   }
 }

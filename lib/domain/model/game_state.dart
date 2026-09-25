@@ -1,6 +1,7 @@
 import 'team.dart';
 import 'word.dart';
 import 'game_config.dart';
+import 'player.dart';
 
 class GameState {
   final GameConfig config;
@@ -22,6 +23,11 @@ class GameState {
     required this.remainingPasses,
     required this.isFinished,
   });
+
+  Player get describer {
+    var team = teams[activeTeamIndex];
+    return team.players[team.describerIndex];
+  }
 
   factory GameState.initial(GameConfig config, List<Word> words) {
     if (words.isEmpty) {

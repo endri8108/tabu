@@ -126,4 +126,41 @@ void main() {
 
     expect(result.currentWord, state.remainingWords[0]);
   });
+
+  test('First describer is the first player of the first team', () {
+    var result = sampleState();
+    expect(result.describer.name, 'Anakin');
+  });
+
+  group('describer rotation', () {
+    // Big deck so the game doesn't end before we're done rotating.
+    GameState stateWithBigDeck() {
+      var state = sampleState();
+      return state.copyWith(
+        remainingWords: List.filled(10, state.currentWord!),
+      );
+    }
+
+    GameState endTurns(GameState state, int count) {
+      for (var i = 0; i < count; i++) {
+        state = apply(state, TurnEnded());
+      }
+      return state;
+    }
+
+    test('after 1 turn the other team describes', () {
+      var result = endTurns(stateWithBigDeck(), 1);
+      expect(result.describer.name, 'Darth Maul');
+    });
+
+    test('after 2 turns the first team moves to its next player', () {
+      var result = endTurns(stateWithBigDeck(), 2);
+      expect(result.describer.name, 'Obi Wan Kenobi');
+    });
+
+    test('after 4 turns it wraps back to the first player', () {
+      var result = endTurns(stateWithBigDeck(), 4);
+      expect(result.describer.name, 'Anakin');
+    });
+  });
 }
