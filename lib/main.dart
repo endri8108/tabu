@@ -29,7 +29,7 @@ void main() {
     roundSeconds: 60,
     targetScore: 30,
     passLimit: 3,
-    players: [anakin, obiwan, maul, sidious],
+    teams: [jedi, sith],
   );
 
   var state = GameState(
