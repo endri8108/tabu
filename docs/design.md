@@ -3,12 +3,12 @@
 ## The game
 - The describer explains the word to their own team. Green = correct, red = taboo, yellow = pass.
 - Modes: single phone (offline) / multiple phones (online) · same room / remote · 2v2 / individual
-- Max 4 players (v1). Invite friends via QR code. No matchmaking.
+- Max 4 players (v1). Invite friends via QR code.
 
 ## Phases
-- v1 (weeks 1–2): single phone, offline, pure Dart. A playable game.
-- v2 (weeks 3–5): online, same room. Backend + WebSocket + auth + QR.
-- v3 (rest of summer): remote voice over WebRTC.
+- v1: single phone, offline, pure Dart. A playable game.
+- v2: online, same room. Backend + WebSocket + auth + QR.
+- v3: *remote voice over WebRTC.
 
 ## Architecture
 - Game engine: `apply(state, event) → new state`. Pure and framework-free: it knows nothing about Flutter, the screen or the network.
