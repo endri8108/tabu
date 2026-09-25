@@ -32,7 +32,7 @@ GameState sampleState() {
     roundSeconds: 60,
     targetScore: 30,
     passLimit: 3,
-    players: [anakin, obiwan, maul, sidious],
+    teams: [jedi, sith],
   );
 
   return GameState(
@@ -85,5 +85,28 @@ void main() {
     var result = state.copyWith(currentWord: () => null);
 
     expect(result.currentWord, null);
+  });
+
+  test('initial sets up a fresh game from config and words', () {
+    var config = sampleState().config;
+    var words = [
+      Word(text: 'Apple', forbiddenWords: ['fruit', 'red'], difficulty: 1),
+      Word(text: 'Train', forbiddenWords: ['rail', 'station'], difficulty: 1),
+      Word(text: 'Moon', forbiddenWords: ['night', 'sky'], difficulty: 2),
+    ];
+
+    var result = GameState.initial(config, words);
+
+    expect(result.currentWord, words[0]);
+    expect(result.remainingWords.length, 2);
+    expect(result.remainingSeconds, config.roundSeconds);
+    expect(result.remainingPasses, config.passLimit);
+    expect(result.activeTeamIndex, 0);
+    expect(result.isFinished, false);
+  });
+
+  test('initial throws when word list is empty', () {
+    var state = sampleState();
+    expect(() => GameState.initial(state.config, []), throwsArgumentError);
   });
 }

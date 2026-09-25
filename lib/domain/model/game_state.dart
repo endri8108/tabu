@@ -23,6 +23,25 @@ class GameState {
     required this.isFinished,
   });
 
+  factory GameState.initial(GameConfig config, List<Word> words) {
+    if (words.isEmpty) {
+      throw ArgumentError('Word List is empty!');
+    }
+
+    var teams = config.teams.map((t) => t.copyWith(score: 0)).toList();
+
+    return GameState(
+      config: config,
+      teams: teams,
+      remainingWords: words.sublist(1),
+      currentWord: words[0],
+      remainingSeconds: config.roundSeconds,
+      remainingPasses: config.passLimit,
+      activeTeamIndex: 0,
+      isFinished: false,
+    );
+  }
+
   GameState copyWith({
     List<Team>? teams,
     int? activeTeamIndex,
