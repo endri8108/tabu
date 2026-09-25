@@ -76,7 +76,7 @@ Setup screen ──► GameState.initial(config, words) ──► first state
 
 ---
 
-## Decisions (and why)
+## Decisions
 
 **1. The game ends when the deck runs out; the last word still counts.**
 The last word is a normal word: if it's guessed before time runs out it scores, if it's a taboo it loses a point. That's why the code updates the score first and checks the deck afterwards.
