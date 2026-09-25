@@ -76,11 +76,18 @@ GameState apply(GameState state, GameEvent event) {
 
     case TurnEnded():
       var nextIndex = (state.activeTeamIndex + 1) % state.teams.length;
+      if (state.remainingWords.isEmpty) {
+        return state.copyWith(isFinished: true);
+      }
+
+      var nextWord = state.remainingWords[0];
 
       return state.copyWith(
         activeTeamIndex: nextIndex,
         remainingSeconds: state.config.roundSeconds,
         remainingPasses: state.config.passLimit,
+        currentWord: () => nextWord,
+        remainingWords: state.remainingWords.sublist(1),
       );
   }
 }
