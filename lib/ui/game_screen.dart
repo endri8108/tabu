@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tabu/domain/model/game_state.dart';
 import 'package:tabu/data/sample_game.dart';
+import 'package:tabu/domain/game/game.dart';
+import 'package:tabu/domain/game/game_event.dart';
 
 class GameScreen extends StatefulWidget {
   // 1. sınıf: "kabuk"
