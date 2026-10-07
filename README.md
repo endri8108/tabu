@@ -3,9 +3,9 @@
 A Taboo word-guessing party game for one phone, built with Flutter on top of a pure, fully tested Dart game engine.
 
 <p align="center">
-  <img src="docs/screenshots/game.png" width="270" alt="A turn in progress: word card, forbidden words, countdown and Taboo / Pass / Correct buttons">
+  <img src="docs/screenshots/intro.png" width="260" alt="Intro for a new UI">
   &nbsp;&nbsp;
-  <img src="docs/screenshots/intro.png" width="260" alt="Between turns: hand the phone to the next describer">
+  <img src="docs/screenshots/game.png" width="260" alt="Modern UI,word card, forbidden words, countdown and Taboo / Pass / Correct buttons">
 </p>
 
 ## How to play
@@ -18,7 +18,7 @@ Two teams take turns. The describer sees a word and must get their team to say i
 | ❌ **Taboo** | −1 for the team (a forbidden word was said), next card |
 | ⏭ **Pass** | skip the card — 3 passes per turn |
 
-When time runs out, the phone goes to the other team and their next player describes. The first team to reach the target score wins; if the deck runs out first, the game ends there.
+A random team starts. When time runs out, the phone goes to the other team and their next player describes. Once every team has played the same number of turns, a team that has reached the target score and is ahead wins (a tie plays another round). If the deck runs out, the cards already played are shuffled back in, so the game never stops early.
 
 ## Features
 
@@ -27,6 +27,8 @@ When time runs out, the phone goes to the other team and their next player descr
 - Circular countdown that turns red in the last 10 seconds
 - Animated card transitions, score animations and haptic feedback
 - Winner / draw screen with *Play again*
+- Light and dark theme (follows the phone, switchable in-game); each team has its own colour
+- 2,176 general English cards, shuffled for every game
 
 ## Architecture
 
@@ -38,7 +40,8 @@ lib/
     model/         ← GameState, GameConfig, Team, Player, Word
     game/          ← GameEvent + apply()
   ui/              ← Flutter widgets; only draws state and sends events
-  data/            ← sample game (until the setup screen exists)
+  data/            ← loads the word list; sample teams (until the setup screen exists)
+assets/words/      ← en.json: 2,176 general cards; modes/: seed cards for topic modes
 ```
 
 The whole game is one function:
@@ -53,7 +56,7 @@ GameState apply(GameState state, GameEvent event)
 
 Because the engine doesn't know about Flutter, it is easy to test, and the plan is to run the same rules on a server (Java) for the online version, with the same tests.
 
-The rules, edge cases and the design decisions behind them (why teams live in `GameConfig`, why describer order is stored on `Team`, what happens when the deck runs out) are written up in **[docs/design.md](docs/design.md)**.
+The rules, edge cases and the design decisions behind them (why teams live in `GameConfig`, why describer order is stored on `Team`, why the deck is reshuffled when it runs out) are written up in **[docs/design.md](docs/design.md)**.
 
 ## Tests
 
@@ -61,8 +64,9 @@ The rules, edge cases and the design decisions behind them (why teams live in `G
 fvm flutter test
 ```
 
-- **12 engine tests** — scoring, deck running out, events after the game ends, turn changes, describer rotation, `GameState.initial`
-- **2 widget tests** — starting a turn, scoring, using a pass
+- **24 engine tests** — scoring, reshuffling when the deck runs out, events after the game ends, turn changes, describer rotation, `GameState.initial` (incl. a random starting team), target score checked at the end of a round
+- **3 widget tests** — starting a turn, scoring, using a pass, switching the theme
+- **5 word list tests** — card count, 5 different forbidden words, no duplicates, no forbidden word that gives the card away
 
 ## Running it
 
@@ -80,6 +84,7 @@ fvm flutter run      # pick an iOS simulator, Android emulator or Chrome
 - [x] **v1 engine** — rules, turns, describer rotation, tests
 - [x] **v1 game screen** — playable on one phone
 - [ ] Setup screen (team and player names, round length, target score)
-- [ ] Bigger word list loaded from JSON
+- [x] Bigger word list loaded from JSON (2,176 general English cards)
+- [ ] Game modes by topic (engineering, medicine, computer science, art, …)
 - [ ] **v2** — online play in the same room (Spring Boot + WebSocket, join by QR code)
 - [ ] **v3** — remote play with voice (WebRTC)
