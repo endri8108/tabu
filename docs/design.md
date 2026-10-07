@@ -48,8 +48,10 @@ Setup screen ──► GameState.initial(config, words) ──► first state
 | `config` | Settings given at setup (never changes) |
 | `teams` | **Current** teams (score, describer order) |
 | `activeTeamIndex` | The team currently playing |
+| `startingTeamIndex` | The team that played the first turn; a round ends when the turn comes back to it |
 | `currentWord` | The card in the describer's hand (on screen) |
 | `remainingWords` | The deck: cards not drawn yet |
+| `usedWords` | Cards already played (guessed, taboo, passed or discarded), waiting to be reshuffled |
 | `remainingSeconds` | Time left in the turn |
 | `remainingPasses` | Passes left in the turn |
 | `isFinished` | Whether the game is over |
@@ -59,27 +61,29 @@ Setup screen ──► GameState.initial(config, words) ──► first state
 - Throws `ArgumentError` if the word list is empty — no game without cards.
 - Takes the teams from `config` and resets their scores to 0.
 - The first word goes to `currentWord`, the rest into the deck (`remainingWords`).
-- Time and passes come from `config`; the first team (index 0) starts.
+- Time and passes come from `config`; the team at `startingTeamIndex` starts (default 0, throws `ArgumentError` if there's no such team). The app picks it at random, so it isn't always the same team that starts.
 
 ### Events and rules
 | Event | What happens |
 |---|---|
-| `Correct` | Active team +1. If the target score is reached, the game ends. Otherwise a new card is drawn. |
+| `Correct` | Active team +1. A new card is drawn. (Reaching the target does **not** end the game mid-turn — see decision 6.) |
 | `Taboo` | Active team −1 (score can go negative). A new card is drawn. |
 | `Pass` | If passes are left, one is used and a new card is drawn. With no passes left, nothing happens. |
 | `SecondTick` | Time goes down by 1. At 0, `TurnEnded` is applied automatically. |
-| `TurnEnded` | The finishing team's describer moves to their next player. The turn passes to the other team. Time and passes reset. The half-played card is discarded and a new one is drawn. |
+| `TurnEnded` | The finishing team's describer moves to their next player. If this closes a round and one team has reached the target score while being strictly ahead, the game ends. Otherwise the turn passes to the next team, time and passes reset, the half-played card is discarded and a new one is drawn. |
 
 **Two rules that apply to every event:**
 1. **If the game is finished** (`isFinished`), no event changes the state.
-2. **If the deck is empty** whenever a card should be drawn, the game ends.
+2. **If the deck is empty** whenever a card should be drawn, the used cards are shuffled into a new deck (decision 1). The game never ends because of the deck.
 
 ---
 
 ## Decisions
 
-**1. The game ends when the deck runs out; the last word still counts.**
-The last word is a normal word: if it's guessed before time runs out it scores, if it's a taboo it loses a point. That's why the code updates the score first and checks the deck afterwards.
+**1. When the deck runs out, the used cards are reshuffled.**
+Every card that leaves the screen goes to `usedWords`. When a card should be drawn and the deck is empty, `usedWords` is shuffled and becomes the new deck, and the card just played goes to its bottom so it can't come straight back. So the game only ends by the target score (decision 6), and every team always gets the same number of turns.
+All card drawing goes through one helper, `_drawCard`. The shuffle order comes from a `Random` that `apply()` takes as an optional third argument, so tests can pass a seeded `Random` and keep the engine predictable (decision 4).
+Before this, the game ended when the deck ran out — which could happen mid-round, before every team had played the same number of turns.
 
 **2. Teams live inside `GameConfig`.**
 On the setup screen players enter their names, form teams, and then the game starts — so teams are part of the setup. Players used to be stored in two places (`config.players` and inside each team); keeping them in one place removes the risk of the two getting out of sync.
@@ -95,20 +99,28 @@ The alternative was computing the describer from a single turn counter; that wou
 **5. `copyWith` takes a function for `currentWord`.**
 It's passed as `currentWord: () => word`. This lets us tell apart "nothing was passed (keep the old one)" from "set it to `null` on purpose".
 
+**6. The target score is checked at the end of a round, not mid-turn.**
+A round is over when the turn comes back to the starting team (`startingTeamIndex`), so every team has played the same number of turns. Only then is the target checked: a team that has reached it **and** is strictly ahead wins. On a tie at the top another round is played.
+Before this, `Correct` ended the game the moment a team reached the target — the first team could win without the second team ever playing.
+
+**7. A random team starts.**
+Always letting the first team start gave it a small edge and got boring. The engine doesn't pick the team itself — `GameState.initial` takes `startingTeamIndex`, and the app passes a random one (`sample_game.dart`). That keeps the engine predictable in tests. Because the starting team is stored, the round-end check (decision 6) still works when the second team starts.
+
 ---
 
 ## Tests
-`test/game_test.dart` — 12 tests, run with `fvm flutter test`. Covered:
-- Correct → score +1; correct on the last card → game ends and the point counts
+`test/game_test.dart` — 24 tests, run with `fvm flutter test`. Covered:
+- Correct → score +1
 - Events are ignored after the game is finished
 - `copyWith` can set `currentWord` to null
-- `initial` sets up the game correctly; throws on an empty word list
+- `initial` sets up the game correctly; any team can start; throws on an empty word list or a starting team that doesn't exist
 - The turn passes to the other team when time runs out
 - A new card is drawn when the turn ends
 - Describer rotation after 1, 2 and 4 turns (including wrap-around)
+- Target score: not checked mid-turn, the second team still gets its turn, game ends at round end when one team is ahead, a tie plays another round, the round ends on the right team when the second team started
+- Deck runs out: the last card still scores and the game goes on, used cards come back as a new deck, the card just played doesn't come straight back, a one-card game keeps working, `TurnEnded` on an empty deck passes the turn
 
 ## Open questions
-- **The target score is currently checked mid-turn** (on `Correct`). In real Taboo it's checked at the end of the turn, and play continues on a tie. To be decided.
+- **At least 2 teams are needed**: the UI detects the end of a turn by `activeTeamIndex` changing.
 - **A team with no players** would cause a division-by-zero error in `% playerCount` → the setup screen won't allow "Start" until every team has at least one player.
 - The `Role` enum (`role.dart`) isn't used yet — it will be used with `view()` (v2).
-- The "draw a card from the deck" code is repeated in `Correct`/`Taboo`/`Pass`/`TurnEnded`; it could be moved into a single helper function.

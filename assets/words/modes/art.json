@@ -1,0 +1,18 @@
+[
+  {"word": "Sculpture", "forbidden": ["art", "carve", "stone", "statue", "shape"], "difficulty": 1, "category": "art"},
+  {"word": "Paintbrush", "forbidden": ["paint", "art", "stroke", "canvas", "bristles"], "difficulty": 1, "category": "art"},
+  {"word": "Mona Lisa", "forbidden": ["painting", "Leonardo", "smile", "Louvre", "da Vinci"], "difficulty": 1, "category": "art"},
+  {"word": "Canvas", "forbidden": ["paint", "painting", "artist", "fabric", "easel"], "difficulty": 2, "category": "art"},
+  {"word": "Watercolor", "forbidden": ["paint", "water", "art", "soft", "colors"], "difficulty": 2, "category": "art"},
+  {"word": "Sketchbook", "forbidden": ["draw", "book", "sketch", "pencil", "artist"], "difficulty": 2, "category": "art"},
+  {"word": "Gallery", "forbidden": ["art", "paintings", "museum", "exhibition", "walls"], "difficulty": 2, "category": "art"},
+  {"word": "Exhibition", "forbidden": ["show", "art", "gallery", "display", "museum"], "difficulty": 2, "category": "art"},
+  {"word": "Masterpiece", "forbidden": ["best", "art", "famous", "painting", "work"], "difficulty": 2, "category": "art"},
+  {"word": "Portrait", "forbidden": ["face", "painting", "person", "picture", "photo"], "difficulty": 2, "category": "art"},
+  {"word": "Landscape", "forbidden": ["nature", "painting", "view", "mountains", "picture"], "difficulty": 2, "category": "art"},
+  {"word": "Self-portrait", "forbidden": ["painting", "yourself", "artist", "face", "selfie"], "difficulty": 3, "category": "art"},
+  {"word": "Pottery", "forbidden": ["clay", "bowl", "wheel", "ceramic", "vase"], "difficulty": 2, "category": "art"},
+  {"word": "Cartoonist", "forbidden": ["cartoon", "draw", "comic", "artist", "funny"], "difficulty": 3, "category": "art"},
+  {"word": "Calligraphy", "forbidden": ["writing", "beautiful", "pen", "letters", "art"], "difficulty": 3, "category": "art"},
+  {"word": "Architecture", "forbidden": ["buildings", "design", "architect", "style", "structure"], "difficulty": 3, "category": "art"}
+]

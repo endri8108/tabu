@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tabu/domain/model/team.dart';
+import 'package:tabu/ui/app_theme.dart';
 
-// Both teams side by side; the team that is playing is highlighted.
 class ScoreBar extends StatelessWidget {
   final List<Team> teams;
   final int activeTeamIndex;
@@ -18,7 +18,11 @@ class ScoreBar extends StatelessWidget {
       children: [
         for (var (i, team) in teams.indexed)
           Expanded(
-            child: _TeamScore(team: team, isActive: i == activeTeamIndex),
+            child: _TeamScore(
+              team: team,
+              color: Palette.team(i),
+              isActive: i == activeTeamIndex,
+            ),
           ),
       ],
     );
@@ -27,9 +31,14 @@ class ScoreBar extends StatelessWidget {
 
 class _TeamScore extends StatelessWidget {
   final Team team;
+  final Color color;
   final bool isActive;
 
-  const _TeamScore({required this.team, required this.isActive});
+  const _TeamScore({
+    required this.team,
+    required this.color,
+    required this.isActive,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -37,23 +46,34 @@ class _TeamScore extends StatelessWidget {
 
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
-      margin: const EdgeInsets.symmetric(horizontal: 6),
-      padding: const EdgeInsets.symmetric(vertical: 10),
+      margin: const EdgeInsets.symmetric(horizontal: 5),
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 14),
       decoration: BoxDecoration(
-        color: isActive ? colors.primaryContainer : colors.surfaceContainer,
-        borderRadius: BorderRadius.circular(18),
+        color: isActive
+            ? color.withValues(alpha: 0.16)
+            : colors.surfaceContainerHigh.withValues(alpha: 0.6),
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: isActive ? colors.primary : Colors.transparent,
+          color: isActive ? color : Colors.transparent,
           width: 2,
         ),
       ),
-      child: Column(
+      child: Row(
         children: [
-          Text(
-            team.name,
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              color: colors.onSurfaceVariant,
+          Container(
+            width: 10,
+            height: 10,
+            decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+          ),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              team.name,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                color: colors.onSurface,
+              ),
             ),
           ),
           // Score "pops" whenever it changes.
@@ -64,7 +84,7 @@ class _TeamScore extends StatelessWidget {
             child: Text(
               '${team.score}',
               key: ValueKey(team.score),
-              style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w900),
+              style: const TextStyle(fontSize: 26, fontWeight: FontWeight.w900),
             ),
           ),
         ],
