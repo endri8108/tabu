@@ -1,0 +1,13 @@
+[
+  {"word": "Plaster cast", "forbidden": ["broken", "arm", "leg", "white", "bone"], "difficulty": 3, "category": "medicine"},
+  {"word": "Surgeon", "forbidden": ["operation", "doctor", "hospital", "knife", "surgery"], "difficulty": 2, "category": "medicine"},
+  {"word": "Vaccine", "forbidden": ["injection", "virus", "immune", "shot", "needle"], "difficulty": 2, "category": "medicine"},
+  {"word": "Stethoscope", "forbidden": ["doctor", "heart", "listen", "chest", "neck"], "difficulty": 2, "category": "medicine"},
+  {"word": "X-ray", "forbidden": ["bones", "hospital", "picture", "radiation", "broken"], "difficulty": 2, "category": "medicine"},
+  {"word": "Emergency room", "forbidden": ["hospital", "urgent", "doctor", "accident", "ER"], "difficulty": 2, "category": "medicine"},
+  {"word": "Wisdom tooth", "forbidden": ["dentist", "back", "pull", "pain", "mouth"], "difficulty": 3, "category": "medicine"},
+  {"word": "DNA", "forbidden": ["genes", "helix", "cells", "code", "biology"], "difficulty": 2, "category": "medicine"},
+  {"word": "Cell", "forbidden": ["biology", "small", "body", "prison", "phone"], "difficulty": 2, "category": "medicine"},
+  {"word": "Virus", "forbidden": ["sick", "infection", "flu", "computer", "spread"], "difficulty": 1, "category": "medicine"},
+  {"word": "Bacteria", "forbidden": ["germs", "small", "infection", "microscope", "antibiotics"], "difficulty": 2, "category": "medicine"}
+]

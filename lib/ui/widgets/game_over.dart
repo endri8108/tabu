@@ -1,6 +1,19 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:tabu/domain/model/game_state.dart';
+import 'package:tabu/domain/model/team.dart';
+import 'package:tabu/ui/app_theme.dart';
 import 'package:tabu/ui/widgets/score_bar.dart';
+
+// Index of the team with the highest score, or null on a draw.
+int? winnerIndex(List<Team> teams) {
+  var best = teams.map((t) => t.score).reduce(max);
+  var leaders = [
+    for (var (i, team) in teams.indexed)
+      if (team.score == best) i,
+  ];
+  return leaders.length == 1 ? leaders.first : null;
+}
 
 // Final screen: winner (or draw), final scores, play again.
 class GameOver extends StatelessWidget {
@@ -12,12 +25,14 @@ class GameOver extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var colors = Theme.of(context).colorScheme;
-    var sorted = [...state.teams]..sort((a, b) => b.score.compareTo(a.score));
-    var isDraw = sorted.length > 1 && sorted[0].score == sorted[1].score;
-    var title = isDraw ? "It's a draw!" : '${sorted.first.name} win!';
+    var winner = winnerIndex(state.teams);
+    var isDraw = winner == null;
+    var title = winner == null
+        ? "It's a draw!"
+        : '${state.teams[winner].name} win!';
 
     return Padding(
-      padding: const EdgeInsets.all(24),
+      padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
       child: Column(
         children: [
           const Spacer(),
@@ -27,17 +42,28 @@ class GameOver extends StatelessWidget {
             curve: Curves.elasticOut,
             builder: (context, scale, child) =>
                 Transform.scale(scale: scale, child: child),
-            child: Icon(
-              isDraw ? Icons.handshake_rounded : Icons.emoji_events_rounded,
-              size: 96,
-              color: const Color(0xFFF5A524),
+            child: Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Palette.trophy.withValues(alpha: 0.15),
+              ),
+              child: Icon(
+                isDraw ? Icons.handshake_rounded : Icons.emoji_events_rounded,
+                size: 88,
+                color: Palette.trophy,
+              ),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 20),
           Text(
             title,
             textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 40, fontWeight: FontWeight.w900),
+            style: TextStyle(
+              fontSize: 40,
+              fontWeight: FontWeight.w900,
+              color: winner == null ? null : Palette.team(winner),
+            ),
           ),
           const SizedBox(height: 8),
           Text(
@@ -45,7 +71,7 @@ class GameOver extends StatelessWidget {
             style: TextStyle(fontSize: 16, color: colors.onSurfaceVariant),
           ),
           const SizedBox(height: 16),
-          ScoreBar(teams: state.teams, activeTeamIndex: -1),
+          ScoreBar(teams: state.teams, activeTeamIndex: winner ?? -1),
           const Spacer(),
           SizedBox(
             width: double.infinity,
@@ -53,16 +79,6 @@ class GameOver extends StatelessWidget {
               onPressed: onPlayAgain,
               icon: const Icon(Icons.replay_rounded),
               label: const Text('Play again'),
-              style: FilledButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 20),
-                textStyle: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                ),
-              ),
             ),
           ),
         ],

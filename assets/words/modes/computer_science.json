@@ -1,0 +1,23 @@
+[
+  {"word": "Bug", "forbidden": ["error", "code", "fix", "debug", "glitch"], "difficulty": 1, "category": "computer_science"},
+  {"word": "Python", "forbidden": ["language", "code", "snake", "programming", "script"], "difficulty": 1, "category": "computer_science"},
+  {"word": "JavaScript", "forbidden": ["web", "frontend", "language", "script", "browser"], "difficulty": 1, "category": "computer_science"},
+  {"word": "AI", "forbidden": ["machine", "learning", "intelligence", "robot", "data"], "difficulty": 1, "category": "computer_science"},
+  {"word": "Cybersecurity", "forbidden": ["hackers", "protect", "data", "internet", "threat"], "difficulty": 1, "category": "computer_science"},
+  {"word": "Algorithm", "forbidden": ["steps", "solve", "problem", "sorting", "logic"], "difficulty": 1, "category": "computer_science"},
+  {"word": "Software Engineer", "forbidden": ["code", "develop", "company", "programmer", "job"], "difficulty": 1, "category": "computer_science"},
+  {"word": "Hard drive", "forbidden": ["storage", "computer", "data", "disk", "memory"], "difficulty": 2, "category": "computer_science"},
+  {"word": "Cloud storage", "forbidden": ["online", "files", "Google Drive", "save", "internet"], "difficulty": 2, "category": "computer_science"},
+  {"word": "Artificial intelligence", "forbidden": ["AI", "robot", "smart", "computer", "ChatGPT"], "difficulty": 2, "category": "computer_science"},
+  {"word": "Chatbot", "forbidden": ["AI", "chat", "robot", "answer", "talk"], "difficulty": 2, "category": "computer_science"},
+  {"word": "Programmer", "forbidden": ["code", "software", "computer", "developer", "bug"], "difficulty": 1, "category": "computer_science"},
+  {"word": "Software update", "forbidden": ["new", "version", "install", "phone", "bug fix"], "difficulty": 2, "category": "computer_science"},
+  {"word": "Computer virus", "forbidden": ["hack", "antivirus", "infect", "malware", "hacker"], "difficulty": 2, "category": "computer_science"},
+  {"word": "Router", "forbidden": ["internet", "WiFi", "box", "connect", "network"], "difficulty": 2, "category": "computer_science"},
+  {"word": "Server", "forbidden": ["computer", "website", "data", "host", "network"], "difficulty": 3, "category": "computer_science"},
+  {"word": "Database", "forbidden": ["data", "store", "table", "SQL", "records"], "difficulty": 3, "category": "computer_science"},
+  {"word": "Bug report", "forbidden": ["error", "software", "fix", "developer", "issue"], "difficulty": 3, "category": "computer_science"},
+  {"word": "Error message", "forbidden": ["wrong", "computer", "warning", "popup", "crash"], "difficulty": 2, "category": "computer_science"},
+  {"word": "Reboot", "forbidden": ["restart", "computer", "turn off", "on", "again"], "difficulty": 2, "category": "computer_science"},
+  {"word": "Backup", "forbidden": ["copy", "save", "files", "data", "lost"], "difficulty": 2, "category": "computer_science"}
+]

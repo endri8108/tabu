@@ -1,0 +1,19 @@
+[
+  {"word": "Atom", "forbidden": ["small", "electron", "nucleus", "particle", "matter"], "difficulty": 2, "category": "science"},
+  {"word": "Test tube", "forbidden": ["lab", "glass", "chemistry", "liquid", "experiment"], "difficulty": 2, "category": "science"},
+  {"word": "Evolution", "forbidden": ["Darwin", "monkey", "species", "change", "develop"], "difficulty": 2, "category": "science"},
+  {"word": "Boiling point", "forbidden": ["water", "boil", "degrees", "hot", "temperature"], "difficulty": 3, "category": "science"},
+  {"word": "Freezing point", "forbidden": ["freeze", "ice", "zero", "cold", "degrees"], "difficulty": 3, "category": "science"},
+  {"word": "Light year", "forbidden": ["distance", "space", "far", "stars", "unit"], "difficulty": 3, "category": "science"},
+  {"word": "Speed of light", "forbidden": ["fast", "Einstein", "space", "fastest", "300,000 km"], "difficulty": 3, "category": "science"},
+  {"word": "Theory", "forbidden": ["idea", "science", "explain", "hypothesis", "Einstein"], "difficulty": 3, "category": "science"},
+  {"word": "Marie Curie", "forbidden": ["radium", "Nobel", "scientist", "woman", "Poland"], "difficulty": 2, "category": "science"},
+  {"word": "Ozone layer", "forbidden": ["atmosphere", "sun", "protect", "hole", "UV"], "difficulty": 3, "category": "science"},
+  {"word": "Fossil fuel", "forbidden": ["oil", "coal", "gas", "burn", "energy"], "difficulty": 3, "category": "science"},
+  {"word": "Prism", "forbidden": ["light", "rainbow", "glass", "colors", "triangle"], "difficulty": 3, "category": "science"},
+  {"word": "Lab coat", "forbidden": ["white", "scientist", "doctor", "chemist", "white jacket"], "difficulty": 2, "category": "science"},
+  {"word": "Safety goggles", "forbidden": ["eyes", "protect", "lab", "glasses", "science"], "difficulty": 2, "category": "science"},
+  {"word": "Periodic table", "forbidden": ["elements", "chemistry", "symbols", "Mendeleev", "chart"], "difficulty": 2, "category": "science"},
+  {"word": "Earth's core", "forbidden": ["center", "hot", "Earth", "inside", "iron"], "difficulty": 3, "category": "science"},
+  {"word": "Constellation", "forbidden": ["stars", "pattern", "Big Dipper", "zodiac", "sky"], "difficulty": 3, "category": "science"}
+]

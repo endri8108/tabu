@@ -1,0 +1,11 @@
+[
+  {"word": "Thermostat", "forbidden": ["temperature", "heat", "wall", "degrees", "control"], "difficulty": 3, "category": "engineering"},
+  {"word": "3D printer", "forbidden": ["print", "three", "plastic", "machine", "model"], "difficulty": 2, "category": "engineering"},
+  {"word": "Solar panel", "forbidden": ["sun", "energy", "roof", "electricity", "power"], "difficulty": 2, "category": "engineering"},
+  {"word": "Wind turbine", "forbidden": ["energy", "blades", "electricity", "spin", "green"], "difficulty": 2, "category": "engineering"},
+  {"word": "Nuclear power", "forbidden": ["atom", "energy", "plant", "radiation", "Chernobyl"], "difficulty": 3, "category": "engineering"},
+  {"word": "Robotics", "forbidden": ["robots", "build", "machines", "program", "engineering"], "difficulty": 3, "category": "engineering"},
+  {"word": "Steel", "forbidden": ["metal", "strong", "iron", "building", "hard"], "difficulty": 2, "category": "engineering"},
+  {"word": "Clockwork", "forbidden": ["gears", "clock", "wind up", "mechanical", "tick"], "difficulty": 3, "category": "engineering"},
+  {"word": "Pendulum", "forbidden": ["swing", "clock", "back and forth", "weight", "hypnosis"], "difficulty": 3, "category": "engineering"}
+]
