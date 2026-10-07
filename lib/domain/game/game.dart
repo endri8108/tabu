@@ -1,8 +1,14 @@
-import '../model/word.dart';
+import 'dart:math';
+
+import '../model/team.dart';
 import '../model/game_state.dart';
 import 'game_event.dart';
 
-GameState apply(GameState state, GameEvent event) {
+// `random` decides the order when the used cards are shuffled back into the
+// deck. Tests pass a seeded Random so the result is always the same.
+GameState apply(GameState state, GameEvent event, [Random? random]) {
+  random ??= Random();
+
   if (state.isFinished) {
     return state;
   }
@@ -15,21 +21,7 @@ GameState apply(GameState state, GameEvent event) {
       var updatedTeams = List.of(state.teams);
       updatedTeams[state.activeTeamIndex] = updatedTeam;
 
-      if (updatedTeam.score >= state.config.targetScore) {
-        return state.copyWith(teams: updatedTeams, isFinished: true);
-      }
-      if (state.remainingWords.isEmpty) {
-        return state.copyWith(teams: updatedTeams, isFinished: true);
-      }
-
-      var nextWord = state.remainingWords[0];
-      var rest = state.remainingWords.sublist(1);
-
-      return state.copyWith(
-        teams: updatedTeams,
-        currentWord: () => nextWord,
-        remainingWords: rest,
-      );
+      return _drawCard(state, random).copyWith(teams: updatedTeams);
 
     case Taboo():
       var activeTeam = state.teams[state.activeTeamIndex];
@@ -39,48 +31,27 @@ GameState apply(GameState state, GameEvent event) {
       var updatedTeams = List.of(state.teams);
       updatedTeams[state.activeTeamIndex] = updatedTeam;
 
-      if (state.remainingWords.isEmpty) {
-        return state.copyWith(teams: updatedTeams, isFinished: true);
-      }
-
-      var nextWord = state.remainingWords[0];
-      var rest = state.remainingWords.sublist(1);
-
-      return state.copyWith(
-        teams: updatedTeams,
-        currentWord: () => nextWord,
-        remainingWords: rest,
-      );
+      return _drawCard(state, random).copyWith(teams: updatedTeams);
 
     case Pass():
       if (state.remainingPasses <= 0) {
         return state;
       }
-      if (state.remainingWords.isEmpty) return state.copyWith(isFinished: true);
 
-      Word nextWord = state.remainingWords[0];
-      var rest = state.remainingWords.sublist(1);
-
-      return state.copyWith(
-        remainingPasses: state.remainingPasses - 1,
-        currentWord: () => nextWord,
-        remainingWords: rest,
-      );
+      return _drawCard(
+        state,
+        random,
+      ).copyWith(remainingPasses: state.remainingPasses - 1);
 
     case SecondTick():
       var secondsLeft = state.remainingSeconds - 1;
 
-      if (secondsLeft <= 0) return apply(state, TurnEnded());
+      if (secondsLeft <= 0) return apply(state, TurnEnded(), random);
 
       return state.copyWith(remainingSeconds: secondsLeft);
 
     case TurnEnded():
       var nextIndex = (state.activeTeamIndex + 1) % state.teams.length;
-      if (state.remainingWords.isEmpty) {
-        return state.copyWith(isFinished: true);
-      }
-
-      var nextWord = state.remainingWords[0];
 
       var activeTeam = state.teams[state.activeTeamIndex];
 
@@ -90,13 +61,44 @@ GameState apply(GameState state, GameEvent event) {
       var updatedTeams = List.of(state.teams);
       updatedTeams[state.activeTeamIndex] = updatedTeam;
 
-      return state.copyWith(
+      // Back to the starting team = every team has played the same number of
+      // turns, so this is the only moment the target score is checked.
+      var roundOver = nextIndex == state.startingTeamIndex;
+      if (roundOver && _hasWinner(updatedTeams, state.config.targetScore)) {
+        return state.copyWith(teams: updatedTeams, isFinished: true);
+      }
+
+      return _drawCard(state, random).copyWith(
         activeTeamIndex: nextIndex,
         remainingSeconds: state.config.roundSeconds,
         remainingPasses: state.config.passLimit,
-        currentWord: () => nextWord,
-        remainingWords: state.remainingWords.sublist(1),
         teams: updatedTeams,
       );
   }
+}
+
+GameState _drawCard(GameState state, Random random) {
+  var current = state.currentWord;
+  var deck = state.remainingWords;
+  var used = [...state.usedWords, ?current];
+
+  if (deck.isEmpty) {
+    var reshuffled = List.of(state.usedWords)..shuffle(random);
+    deck = [...reshuffled, ?current];
+    used = [];
+  }
+
+  return state.copyWith(
+    currentWord: () => deck.first,
+    remainingWords: deck.sublist(1),
+    usedWords: used,
+  );
+}
+
+bool _hasWinner(List<Team> teams, int targetScore) {
+  var scores = teams.map((t) => t.score).toList()..sort();
+  var best = scores.last;
+
+  if (best < targetScore) return false;
+  return scores.length == 1 || best > scores[scores.length - 2];
 }
